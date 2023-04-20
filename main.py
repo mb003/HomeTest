@@ -155,8 +155,8 @@ def enviromentEventDispatch(man):
 			if (random.uniform(0,100) < percent):
 				newEvent = event(man.getCurrentTime(), "toiletStart")
 				eventQueue.append(newEvent)
-				
-	# print 'eventDispatch', time.strftime("%Y %m %d %H:%M:%S" , time.localtime(currentTime))
+
+	# print('eventDispatch', time.strftime("%Y %m %d %H:%M:%S" , time.localtime(currentTime)))
 
 # Event manage 事件执行
 def eventManage(man):

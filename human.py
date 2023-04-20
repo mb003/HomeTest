@@ -188,12 +188,12 @@ class human:
 			if ( tempDeviceList !=[] ):
 				tempDevice = tempDeviceList[0]
 				self.moveTo( tempDevice.getPosX(), tempDevice.getPosY() )
-				# print 'Turn on ', deviceType, ' in ', tempRoom.getType()
+				# print('Turn on ', deviceType, ' in ', tempRoom.getType())
 				return True
 			else:
 				return False
 		else:
-			print 'Not in any room'
+			print('Not in any room')
 			return False
 
 	# 关闭所在房间的设备
@@ -204,12 +204,12 @@ class human:
 			if (tempDeviceList != [] ):
 				tempDevice = tempDeviceList[0]
 				self.moveTo( tempDevice.getPosX(), tempDevice.getPosY() )
-				# print 'Turn off ', deviceType, ' in ', tempRoom.getType()
+				# print('Turn off ', deviceType, ' in ', tempRoom.getType())
 				return True
 			else:
 				return False
 		else:
-			print 'Not in any room'
+			print('Not in any room')
 			return False
 
 	# 设定所在房间的指定设备的值
@@ -220,12 +220,12 @@ class human:
 			if ( tempDeviceList != [] ):
 				tempDevice = tempDeviceList[0]
 				self.moveTo( tempDevice.getPosX(), tempDevice.getPosY() )
-				# print 'Set ', tempDeviceList[0].getName(), ' to ', value, ' in ', tempRoom.getType()
+				# print('Set ', tempDeviceList[0].getName(), ' to ', value, ' in ', tempRoom.getType())
 				return True
 			else:
 				return False
 		else:
-			print 'Not in any room'
+			print('Not in any room')
 			return False
 
 	# 打开距离最近的某类设备
@@ -233,10 +233,10 @@ class human:
 		tempDevice = self.house.turnOnNearDevice(self.posX, self.posY, deviceType)
 		if (tempDevice != None):
 			self.moveTo(tempDevice.getPosX(), tempDevice.getPosY())
-			# print 'Turn on ', tempDevice.getName()
+			# print('Turn on ', tempDevice.getName())
 			return True
 		else:
-			print 'There isn\'t any ', deviceType
+			print('There isn\'t any ', deviceType)
 			return False
 
 	# 关闭距离最近的某类设备
@@ -244,10 +244,10 @@ class human:
 		tempDevice = self.house.turnOffNearDevice(self.posX, self.posY, deviceType)
 		if ( tempDevice != None ):
 			self.moveTo(tempDevice.getPosX(), tempDevice.getPosY())
-			# print 'Turn off ', tempDevice.getName()
+			# print('Turn off ', tempDevice.getName())
 			return True
 		else:
-			print 'There isn\'t any ', deviceType
+			print('There isn\'t any ', deviceType)
 			return False
 
 	# 设定距离最近指定设备的值
@@ -255,10 +255,10 @@ class human:
 		tempDevice = self.house.setNearDeviceValue(self.posX, self.posY, deviceType, value)
 		if ( tempDevice != None ):
 			self.moveTo(tempDevice.getPosX(), tempDevice.getPosY())
-			# print 'Set ', tempDevice.getName()
+			# print('Set ', tempDevice.getName())
 			return True
 		else:
-			print 'There isn\'t any ', deviceType
+			print('There isn\'t any ', deviceType)
 			return False
 
 	# # 打开附近的空调并设定温度(待修改)
@@ -272,7 +272,7 @@ class human:
 	# 	if(minDis < 100000):
 	# 		tempDev.turnOn()
 	# 		tempDev.setValue(destinationTemperature)
-	# 		print 'Turn on ', dev.getName(), ' and set destination temperature to ', destinationTemperature
+	# 		print('Turn on ', dev.getName(), ' and set destination temperature to ', destinationTemperature)
 	# 	else:
 	# 		print('There is not any air condition.')
 
@@ -296,7 +296,7 @@ class human:
 	# 			minDis = dev.calDistance(self.posX, self.posY)
 	# 	if(minDis < 100000):
 	# 		tempDev.turnOn()
-	# 		print 'Turn on ', dev.getName()
+	# 		print('Turn on ', dev.getName())
 	# 	else:
 	# 		print('There is not any TV.')
 
@@ -418,13 +418,13 @@ class human:
 			return tempRoom.getType()
 
 	def printNowStatu(self):
-		print 'Time:	', self.getCurrentTimeStr(), '	Temperature:	', self.simT.getCurrentTemperature()
+		print('Time:	', self.getCurrentTimeStr(), '	Temperature:	', self.simT.getCurrentTemperature())
 		houseMap = self.getHouse().printHouseInfo()
 		houseMap[self.posY][self.posX] = 'M'
 		for i in range(self.getHouse().getHeight()):
 			for j in range(self.getHouse().getWidth()):
-					print houseMap[i][j],
-			print ''
+					print(houseMap[i][j],)
+			print('')
 
 	def writeNowStatu(self, fp):
 		fp.write ('Time:	' + self.getCurrentTimeStr() + '	Temperature:	%f'  %self.simT.getCurrentTemperature() + '\n')

@@ -19,7 +19,7 @@ class house:
 
 	# 初始化函数
 	def __init__(self, ID = -1, roomList = [], width = 20, height = 20):
-		print 'in __init__ of house'
+		print('in __init__ of house')
 		self.ID       = ID
 		self.width    = width
 		self.height   = height
@@ -41,7 +41,7 @@ class house:
 
 	# 生成房间结构
 	def createHouseStructure(self, roomList):
-		print 'in createHouseStructure'
+		print('in createHouseStructure')
 		self.roomList = []
 		roomNum = len(roomList)
 		for roomName in roomList:
@@ -57,7 +57,7 @@ class house:
 			newRoom = room(-1, roomName, tempPosX, tempPosX, tempPosY, tempPosY)
 			self.roomList.append(newRoom)
 
-		# print 'end of seed create'
+		# print('end of seed create')
 
 		endFlag = False
 		while(not endFlag):
@@ -99,7 +99,7 @@ class house:
 				if(flag):
 					tempRoom.setBottom(newBottom)
 					endFlag = False
-			# print 'loop'
+			# print('loop')
 
 		flag = True
 		for tempRoom in self.roomList:
@@ -130,7 +130,7 @@ class house:
 	def printHouseInfo(self):
 		for tempRoom in self.roomList:
 			tempRoom.printInfo
-		# print "House Map:"
+		# print("House Map:")
 		houseMap = [ [' ' for col in range(self.width)] for row in range(self.height)]
 		for i in range(self.width):
 			for j in range(self.height):
@@ -141,19 +141,19 @@ class house:
 						houseMap[j][i] = tempRoom.getType()[0]
 					count = count + 1
 
-		# print 'Len of roomList:	', len(self.roomList)
+		# print('Len of roomList:	', len(self.roomList))
 		for tempRoom in self.roomList:
-			# print 'Room Type:	', tempRoom.getType(), len(tempRoom.deviceList)
+			# print('Room Type:	', tempRoom.getType(), len(tempRoom.deviceList))
 			for tempDevice in tempRoom.deviceList:
-				# print 'Device Type:	', tempDevice.getType()
+				# print('Device Type:	', tempDevice.getType())
 				x = tempDevice.getPosX()
 				y = tempDevice.getPosY()
 				houseMap[y][x] = tempDevice.getTypeAbbr()
 
 		# for i in range(self.height):
 		# 	for j in range(self.width):
-		# 			print houseMap[i][j],
-		# 	print ''
+		# 			print(houseMap[i][j],)
+		# 	print('')
 		return houseMap
 
 	# 开启指定房间内指定设备类型的设备，返回设备列表

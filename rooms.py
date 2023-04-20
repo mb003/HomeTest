@@ -20,7 +20,7 @@ class room:
 
 
 	def __init__(self, ID = -1, roomType = 'None', roomLeft = 0, roomRight = 0, roomTop = 0, roomBottom = 0):
-		# print 'in __init__ of room'
+		# print('in __init__ of room')
 		
 		# self.roomType   = self.roomDict.get(roomType)
 		self.ID         = ID
@@ -39,17 +39,17 @@ class room:
 	# 			return i
 
 	def printInfo(self):
-		print "Room type:	", self.roomType
-		print "Room left:	", self.roomLeft
-		print "Room right:	", self.roomRight
-		print "Room top:	", self.roomTop
-		print "Room bottom:	", self.roomBottom
+		print("Room type:	", self.roomType)
+		print("Room left:	", self.roomLeft)
+		print("Room right:	", self.roomRight)
+		print("Room top:	", self.roomTop)
+		print("Room bottom:	", self.roomBottom)
 
 	def getID(self):
 		return self.ID
 
-	def isInRoom(self, posX, posY):
-		return ( posX <= self.roomRight and  posX >= self.roomLeft and posY <= self.roomBottom and posY >= self.roomTop )
+		def isInRoom(self, posX, posY):
+			return ( posX <= self.roomRight and  posX >= self.roomLeft and posY <= self.roomBottom and posY >= self.roomTop )
 
 	def getLeft(self):
 		return self.roomLeft
@@ -95,7 +95,7 @@ class room:
 		return self.deviceList
 
 	def initDeviceList(self):
-		# print 'in initDeviceList:	', self.getType()
+		# print('in initDeviceList:	', self.getType())
 		# Livingroom
 		if (self.roomType == 'livingRoom'):
 			livingRoomTV             = device(0, 'livingRoomTV', 'TV', 0, 0)
@@ -365,7 +365,7 @@ class room:
 				sqlMana.update(sql)
 			else:
 				sql = "insert into room (houseID, roomType, roomLeft, roomRight, roomTop, roomBottom) values (%d, '%s', %lf, %lf, %lf, %lf)" %(houseID, self.roomType, self.roomLeft, self.roomRight, self.roomTop, self.roomBottom) 
-				# print "sdfsdfsdfsfdfssfsfd: ", sql
+				# print("sdfsdfsdfsfdfssfsfd: ", sql)
 				sqlMana.insert(sql)
 				temp = sqlMana.query('select @@identity as newID')
 				self.ID = temp[0].get('newID')

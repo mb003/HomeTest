@@ -69,11 +69,11 @@ class device:
 
 	def turnOn(self):
 		self.statu        =  1
-		# print self.name + ' has been turn on'
+		# print(self.name + ' has been turn on')
 
 	def turnOff(self):
 		self.statu        =  0
-		# print self.name + ' has been turn off'
+		# print(self.name + ' has been turn off')
 
 	def getValue(self):
 		return self.value
@@ -118,7 +118,7 @@ class device:
 			tempPosX = int((roomLeft+roomRight)/2)
 			tempPosY = int((roomTop+roomBottom)/2)
 			self.setPos(tempPosX, tempPosY)
-			# print 'lamp', self.getPosX(), self.getPosY()
+			# print('lamp', self.getPosX(), self.getPosY())
 		if(self.deviceType == 'airCondition'):
 			direction = random.randint(1, 4)
 			if(direction == 1):
@@ -134,7 +134,7 @@ class device:
 				tempPosY = roomBottom
 				tempPosX = random.randint(roomLeft, roomRight)
 			self.setPos(tempPosX, tempPosY)
-			# print 'airCondition', self.getPosX(), self.getPosY()
+			# print('airCondition', self.getPosX(), self.getPosY())
 		if(self.deviceType == 'TV'):
 			direction = random.randint(1, 4)
 			if(direction == 1):
@@ -150,22 +150,22 @@ class device:
 				tempPosY = roomBottom
 				tempPosX = random.randint(roomLeft, roomRight)
 			self.setPos(tempPosX, tempPosY)
-			# print 'TV', self.getPosX(), self.getPosY()
+			# print('TV', self.getPosX(), self.getPosY())
 		if(self.deviceType == 'computer'):
 			tempPosX = random.randint(roomLeft, roomRight)
 			tempPosY = random.randint(roomTop, roomBottom)
 			self.setPos(tempPosX, tempPosY)
-			# print 'computer', self.getPosX(), self.getPosY()
+			# print('computer', self.getPosX(), self.getPosY())
 		if(self.deviceType == 'charger'):
 			tempPosX = random.randint(roomLeft, roomRight)
 			tempPosY = random.randint(roomTop, roomBottom)
 			self.setPos(tempPosX, tempPosY)
-			# print 'charger', self.getPosX(), self.getPosY()
+			# print('charger', self.getPosX(), self.getPosY())
 		if(self.deviceType == 'heater'):
 			tempPosX = random.randint(roomLeft, roomRight)
 			tempPosY = random.randint(roomTop, roomBottom)
 			self.setPos(tempPosX, tempPosY)
-			# print 'heater', self.getPosX(), self.getPosY()
+			# print('heater', self.getPosX(), self.getPosY())
 		if(self.deviceType == 'door'):
 			direction = random.randint(1, 4)
 			if(direction == 1):
@@ -181,7 +181,7 @@ class device:
 				tempPosY = roomBottom
 				tempPosX = random.randint(roomLeft, roomRight)
 			self.setPos(tempPosX, tempPosY)
-			# print 'door', self.getPosX(), self.getPosY()
+			# print('door', self.getPosX(), self.getPosY())
 		if(self.deviceType == 'window'):
 			direction = random.randint(1, 4)
 			tempPosX = int( (roomLeft+roomRight)/2 )
@@ -199,12 +199,12 @@ class device:
 				tempPosY = roomBottom
 				tempPosX = random.randint(roomLeft, roomRight)
 			self.setPos(tempPosX, tempPosY)
-			# print 'window',  self.getPosX(), self.getPosY()
+			# print('window',  self.getPosX(), self.getPosY())
 		if(self.deviceType == 'other'):
 			tempPosX = random.randint(roomLeft, roomRight)
 			tempPosY = random.randint(roomTop, roomBottom)
 			self.setPos(tempPosX, tempPosY)
-			# print 'other:	', self.getPosX(), self.getPosY()
+			# print('other:	', self.getPosX(), self.getPosY())
 
 	def getTypeAbbr(self):
 		if(self.deviceType == 'computer'):

@@ -35,7 +35,7 @@ class temperatureSimulator:
 
 	def getInDoorTemperature(self, currentTime):
 		outDoorT = self.getOutDoorTemperature(currentTime)
-		# print outDoorT
+		# print(outDoorT)
 		T = 0.6 * 25 + 0.4 * outDoorT
 		return T
 

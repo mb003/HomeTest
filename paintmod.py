@@ -102,13 +102,13 @@ class paintMod:
             # pygame.draw.circle(self.screen, self.manColor, (int(self.temp), int(self.temp)), 5)
             # self.temp = self.temp + 0.1                
 
-        # print man.getCurrentTimeStr(), man.getPos()
+        # print(man.getCurrentTimeStr(), man.getPos())
        
         # self.screen.blint(text_screen)
         # 重画屏幕
         pygame.display.flip()
         time.sleep(0.001)
-        # print 'paint picture'
+        # print('paint picture')
     
     def printOnScreen(self, str = '', font = None, size = 20, color = (0, 0, 0), pos = (0, 0), mode = 'CENTER'):
         textFont = pygame.font.SysFont(font, size)

@@ -36,8 +36,8 @@ from human import human
 # 		self._vlist.append(value)
 # 	def printValueList(self):
 # 		for v in self._vlist:
-# 			print " ", v,
-# 		print ''
+# 			print(" ", v,)
+# 		print('')
 
 # tt = T(1234)
 # tt.appendValueList(666)
@@ -57,14 +57,14 @@ from human import human
 # 	for i in range(5):
 # 		tT.appendValueList(i + count * 5)
 # 	count = count + 1
-# 	# print tempT.getValue()
+# 	# print(tempT.getValue())
 # # myList[0].vlist[3] = 44
 
 # for ttT in myList:
 # 	ttT.printValueList()
-# 	print ttT.getValue(), T.value
+# 	print(ttT.getValue(), T.value)
 
-# print 't:	', tt.printValueList()
+# print('t:	', tt.printValueList())
 
 
 
@@ -80,7 +80,7 @@ from human import human
 # 	}
 
 
-# print roomDict.get('asdasdad') == None
+# print(roomDict.get('asdasdad') == None)
 
 # import matplotlib.pyplot as plt
 # import turtle
@@ -137,10 +137,10 @@ endTimeStr = "2016 6 19 00:00:00"
 endTime = time.mktime(time.strptime(endTimeStr, "%Y %m %d %H:%M:%S"))
 
 # startTimeStr = time.strftime("%Y %m %d", time.localtime(currentTime))
-# print startTimeStr
+# print(startTimeStr)
 
 # startTime = time.mktime(time.strptime( startTimeStr + " 16:49:19", "%Y %m %d %H:%M:%S"))
-# print time.strftime("%H:%M:%S", time.localtime(startTime))
+# print(time.strftime("%H:%M:%S", time.localtime(startTime)))
 
 fp = open('light.txt', 'w')
 

@@ -22,13 +22,13 @@ endTime = time.time()
 
 deltaTime = endTime - startTime
 
-print res[0].get('newID')
+print(res[0].get('newID'))
 
-# print count / deltaTime
-# print res[0].get("PM25")
-# print len(res)
+# print(count / deltaTime)
+# print(res[0].get("PM25"))
+# print(len(res))
 # for temp in res:
-	# print temp.get("PM25")
+	# print(temp.get("PM25"))
 
 
 # time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time()))
