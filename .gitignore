@@ -1,2 +1,2 @@
-# Python class files
-*.pyc
+node_modules/
+/venv/
