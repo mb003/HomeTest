@@ -17,11 +17,14 @@ class event:
 			man.getSimT().setTemperatureOff()
 		if(random.uniform(0,100) < man.getCarefulness() ):
 			man.turnOffAllByDeviceType("computer")
-		if(random.uniform(0,100) < man.getCarefulness() ):
-			man.turnOffAllByDeviceType("TV")
+		
+		#没有TV
+		# if(random.uniform(0,100) < man.getCarefulness() ):
+		# 	man.turnOffAllByDeviceType("TV")
+		
 		self.turnOffAllSundries(man)
-		man.turnOnDevice("livingRoom", "door")
-		man.turnOffDevice("livingRoom", "door")
+		man.turnOnDevice("dormitory", "door")
+		man.turnOffDevice("dormitory", "door")
 		man.leaveHome()
 		return None
 
@@ -29,11 +32,11 @@ class event:
 	def goHome(self, man):
 		print('\nRule:	go home.')
 		man.goBackHome()
-		man.turnOnDevice('livingRoom', 'door')
+		man.turnOnDevice('dormitory', 'door')
 		if(random.uniform(0,100) < man.getVigour()):
-			man.turnOnDevice('livingRoom', 'lamp')
+			man.turnOnDevice('dormitory', 'lamp')
 		if(random.uniform(0,100) < man.getRegular()):
-			man.turnOnDevice('livingRoom', 'TV')
+			man.turnOnDevice('dormitory', 'TV')
 		return None
 
 	# 睡觉事件（计划事件）
@@ -44,35 +47,14 @@ class event:
 		# if(random.uniform(0,100) < man.getCarefulness() ):
 		self.turnOffAllSundries(man)
 		if(random.uniform(0,100) < man.getCarefulness() ):
-			man.turnOffDevice('livingRoom', 'door')
+			man.turnOffDevice('dormitory', 'door')
 		if(random.uniform(0,100) < man.getCarefulness() ):
 			man.turnOffAllByDeviceType('lamp')
 		if(random.uniform(0,100) < man.getVigour()):
 			man.turnOffAllByDeviceType('lamp')
-		man.turnOnDevice('masterBedroom', 'door')
-		man.turnOffDevice('masterBedroom', 'door')
-		man.moveToRoom('masterBedroom')
 		man.goToSleep()
 		return event( man.getCurrentTime() + 5*60*60, "defaultEvent" )
 
-	# 看电视事件（计划事件）
-	def watchTV(self, man):
-		if(not man.isInHome()):
-			return None
-		self.turnOffDevicesListInRoom(man = man)
-		print('\nRule:	watch TV.')
-		if( random.uniform(0,100) < 50 ):
-			man.turnOnDevice('livingRoom', 'TV')
-			man.moveToRoom('livingRoom')
-			if( man.getNowRoom().isDarkness(man.getCurrentTime()) ):
-				self.turnOnLampInRoom(man)	
-			return event(man.getCurrentTime() + 10*60, "defaultEvent")
-		else:
-			man.turnOnDeviceInRoom('TV')
-			if( man.getNowRoom().isDarkness(man.getCurrentTime()) ):
-				self.turnOnLampInRoom(man)
-			man.moveRandomInRoom()
-			return None
 
 	# 调整室温事件
 	def adjustTemprature(self, man):
@@ -87,33 +69,28 @@ class event:
 			man.setNearDeviceValue("airCondition", 25)
 			return None
 
-	# 做饭事件（计划事件）
-	def cook(self, man):
-		if(not man.isInHome()):
-			return None
-		print('\nRule:	cooking~')
-		if( man.getHouse().roomExist('kitchen') ):
-			man.moveToRoom('kitchen')
-			lockEvent = event(man.getCurrentTime() + 15*60, "defaultEvent" )
-			return lockEvent
-		else:
-			print('There is not any kitchen.')
-			return None
-
 	# 起床事件（计划事件）
 	def wakeUp(self, man):
 		if(not man.isInHome()):
 			return None
 		print('\nRule:	wake up.')
-		if(random.uniform(0,100) < man.getVigour()):
-			man.turnOnDevice('masterBedroom', 'lamp')
-		man.turnOnDevice('masterBedroom', 'door')
-		if(random.uniform(0,100) < man.getCarefulness()):
-			man.turnOffDevice('masterBedroom', 'lamp')
-		if(random.uniform(0,100) < 50):
-			man.turnOffDevice('masterBedroom', 'door')
 		man.wakeUp()
-		return None
+		#人体传感器检测到人体移动，在下面桌子上
+		man.turnOnDevice('dormitory','humanSensor')
+		#太暗了就开灯，这个灯是共用灯
+		if(man.getNowRoom().isDarkness(man.getCurrentTime())):
+			self.turnOnLampInRoom(man)
+		#开门，去刷牙
+		man.turnOnDevice('dormitory', 'door')
+		man.turnOffDevice('dormitory', 'door')
+		man.moveTo('bathroom')
+		#刷牙, 2-15分钟
+		lockEvent = event(man.getCurrentTime() + random.randint(2, 15)*60, "defaultEvent")
+		#刷完牙回寝
+		man.turnOnDevice('dormitory', 'door')
+		man.turnOffDevice('dormitory', 'door')
+		man.moveTo('dormitory')
+		return lockEvent
 
 	# 读书事件（计划事件）
 	def readBook(self, man):
@@ -147,56 +124,25 @@ class event:
 	def playVideoGame(self, man):
 		if(not man.isInHome()):
 			return None
-		self.turnOffDevicesListInRoom(man = man)
-		if(random.randint(0,100) > man.getRegular() ):
-			# 较小概率去看电视或看书
-			if (random.randint(0, 100) < man.getVigour() ):
-				return event(man.getCurrentTime(), "watchTV")
-			else:
-				return event(man.getCurrentTime(), "readBook")
-		if(man.getHouse().roomExist('studyRoom')):
-			print('\nRule:	video game start.')
-			man.turnOnDevice('studyRoom', 'door')
-			if(random.uniform(0,100) < 20):
-				man.turnOnDeviceByDeviceName('studyRoom', 'studyRoomCeilingLamp')
-			man.turnOnDeviceByDeviceName('studyRoom', 'studyRoomDeskLamp')
-			if(random.uniform(0,100) < 5):
-				man.turnOnDeviceByDeviceName('studyRoom', 'studyRoomAudioSystem')
-			if(random.uniform(0,100) < 50):
-				man.turnOffDevice('studyRoom', 'door')
-			man.moveToRoom('studyRoom')
-			man.turnOnDevice('studyRoom', 'computer')
-			lockEvent = event(man.getCurrentTime() + int(random.randint(15, 40)*(100-man.getVigour())/100.0), "defaultEvent")
-			return lockEvent
-		else:
-			print('There is not any studyRoom')
-			man.turnOnNearDevice('computer')
-			lockEvent = event(man.getCurrentTime() + int(random.randint(15, 40)*(100-man.getVigour())/100.0), "defaultEvent")
-			return None
+		man.turnOnDeviceInRoom('computer')
+		return None
 
 	# 吃饭（计划事件）
 	def eatDinner(self, man):
 		if(not man.isInHome()):
 			return None
 		print('\nRule:	eat dinner.')
-		self.turnOffDevicesListInRoom(man = man)
+		#去吃饭，关掉自己的设备后出寝室，到达食堂
+		self.turnOffDevicesListOfManSelf(man = man)
 		if( man.getHouse().roomExist('diningRoom') ):
 			man.moveToRoom('diningRoom')
-			if( man.getNowRoom().isDarkness(man.getCurrentTime()) ):
-				self.turnOnLampInRoom(man)
-			if( random.randint(0,100) < man.getCarefulness ):
-				self.turnOffOtherRoomLamp(man)
 			lockEvent = event(man.getCurrentTime() + 15*60 + random.randint(0, 15) * 60, "defaultEvent" )
 			return lockEvent
 		else:
-			man.moveToRoom('livingRoom')
+			man.moveToRoom('')
 			lockEvent = event(man.getCurrentTime() + 15*60 + random.randint(0, 15) * 60, "defaultEvent" )
 			if( man.getNowRoom().isDarkness(man.getCurrentTime()) ):
 				man.turnOnLampInRoom(man)
-			if( random.randint(0,100) < man.getVigour()):
-				self.turnOnDeviceInRoom(man, 'TV')
-			if( random.randint(0,100) < man.getCarefulness() ):
-				self.turnOffOtherRoomLamp(man)
 			return lockEvent
 		return None
 
@@ -246,12 +192,28 @@ class event:
 			man.turnOffDeviceInRoom(tempDeviceType)
 		man.moveTo(tempX, tempY)
 		return None
+	
+	#关闭寝室里的属于自己的设备
+	def turnOffDevicesListOfManSelf(self,man,deviceTypeList = ['lamp','computer','other',]):
+		if(not man.isInHome()):
+			return None
+		tempX = man.getPosX()
+		tempY = man.getPosY()
+		for tempDeviceType in deviceTypeList:
+			#属于自己,或者别人临时授权了
+				man.turnOffDeviceInRoomOfManSelf(tempDeviceType)
+		man.moveTo(tempX, tempY)
+		return None
 
 	# 打开窗户(待修改)
 	def openWindow(self, man):
 		if(not man.isInHome()):
 			return None
 		print('Rule:    open the window in the room which the man in')
+		tempX = man.getPosX()
+		tempY = man.getPosY()
+		man.turnOnDeviceInRoom('window')
+		man.moveTo(tempX, tempY)
 		return None
 
 	# 关闭窗户(待修改)
@@ -259,6 +221,10 @@ class event:
 		if(not man.isInHome()):
 			return None
 		print('Rule:    close the window in the room which the man in')
+		tempX = man.getPosX()
+		tempY = man.getPosY()
+		man.turnOffDeviceInRoom('window')
+		man.moveTo(tempX, tempY)
 		return None
 
 	# 开始洗澡事件（计划事件）
@@ -267,11 +233,9 @@ class event:
 			return None
 		print('Rule:	take a shower start.')
 		if( man.getHouse().roomExist('bathroom') ):
-			man.turnOnDevice('bathroom', 'door')
+			man.turnOnDevice('dormitory', 'door')
+			man.turnOffDevice('dormitory', 'door')
 			man.moveToRoom('bathroom')
-			man.turnOnDevice('bathroom', 'lamp')
-			man.turnOffDevice('bathroom', 'door')
-			man.turnOnDevice('bathroom', 'heater')
 			showerTime = 10 + random.randint( int(8 * man.getRegular()/100.0),  int(8 + 8 * (1.0 - man.getRegular()/100.0)) ) 
 			lockEvent = event(man.getCurrentTime() + showerTime*60, "takeAShowerEnd" )
 			return lockEvent
@@ -285,12 +249,10 @@ class event:
 			return None
 		print('Rule:	take a shower end')
 		if( man.getHouse().roomExist('bathroom') ):
-			man.turnOffDevice('bathroom', 'heater')
-			man.turnOnDevice('bathroom', 'door')
-			man.turnOffDevice('bathroom', 'lamp')
-			man.moveToRoom('bathroom')
+			man.turnOnDevice('dormitory', 'door')
 			if(random.uniform(0,100) < man.getCarefulness()):
-				man.turnOffDevice('bathroom', 'door')
+				man.turnOffDevice('dormitory', 'door')
+			man.moveToRoom('dormitory')
 			return None
 		else:
 			print('There is not any bathroom.')
@@ -300,10 +262,9 @@ class event:
 	def toiletStart(self, man):
 		print('Rule:	go to toilet.')
 		if( man.getHouse().roomExist('bathroom') ):
-			man.turnOnDevice('bathroom', 'door')
-			man.moveToRoom('bathroom')
-			man.turnOnDevice('bathroom', 'lamp')
-			man.turnOffDevice('bathroom', 'door')
+			man.turnOnDevice('dormitory', 'door')
+			if (random.uniform(0,100) < man.getCarefulness()):
+				man.turnOffDevice('dormitory', 'door')
 			toiletTime = 2 + random.randint( int(4 * man.getRegular()/100.0),  int(4 + 4 * (1.0 - man.getRegular()/100.0)) ) 
 			lockEvent = event(man.getCurrentTime() + toiletTime*60, "toiletEnd", man.getPosX(), man.getPosY() )
 			return lockEvent
@@ -314,12 +275,9 @@ class event:
 	# 如厕结束事件
 	def toiletEnd(self, man):
 		print('Rule:	end of toilet.')
-		man.turnOnDevice('bathroom', 'door')
-		if(random.randint(0,100) < man.getCarefulness()):
-			man.turnOffDevice('bathroom', 'lamp')
-		if( random.randint(0,100) < man.getVigour() ):
-			if( random.randint(0, 100) < man.getCarefulness()):
-				man.turnOffDevice('bathroom', 'door')
+		man.turnOnDevice('dormitory', 'door')
+		if(random.uniform(0,100) < man.getCarefulness()):
+			man.turnOffDevice('dormitory', 'door')
 		man.moveTo(self.recordPosX, self.recordPosY)
 		return None
 
@@ -340,16 +298,7 @@ class event:
 			man.moveToRoom(tempRoomType)
 		return event()
 
-	# 关闭电视事件
-	def turnOffAllTV(self, man):
-		if( not man.isInHome() ):
-			return None
-		# print('Rule:	turn off all TV')
-		tempRoomType = man.getNowRoomType()
-		man.turnOffAllByDeviceType("TV")
-		if( tempRoomType != None ):
-			man.moveToRoom(tempRoomType)
-		return None
+
 
 	# 关闭所有杂项电器（包括 TV, computer, charger, heater, other）
 	def turnOffAllSundries(self, man):
@@ -357,10 +306,8 @@ class event:
 			return None
 		# print('Rule:	turn off all sundries')
 		tempRoomType = man.getNowRoomType()
-		man.turnOffAllByDeviceType("TV")
 		man.turnOffAllByDeviceType("computer")
 		man.turnOffAllByDeviceType("charger")
-		man.turnOffAllByDeviceType("heater")
 		man.turnOffAllByDeviceType("other")
 		if( tempRoomType != None ):
 			man.moveToRoom(tempRoomType)
