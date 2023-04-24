@@ -15,13 +15,15 @@ class room:
 		"bathroom"             :           400,
 		"kitchen"              :           500,
 		"diningRoom"           :           600,
-		"studyRoom"            :           700
+		"studyRoom"            :           700,
+        "dormitory"            :           1000
 	}
 
 
 	def __init__(self, ID = -1, roomType = 'None', roomLeft = 0, roomRight = 0, roomTop = 0, roomBottom = 0):
 		# print('in __init__ of room')
 		
+        
 		# self.roomType   = self.roomDict.get(roomType)
 		self.ID         = ID
 		self.setType(roomType)
@@ -48,8 +50,8 @@ class room:
 	def getID(self):
 		return self.ID
 
-		def isInRoom(self, posX, posY):
-			return ( posX <= self.roomRight and  posX >= self.roomLeft and posY <= self.roomBottom and posY >= self.roomTop )
+	def isInRoom(self, posX, posY):
+		return ( posX <= self.roomRight and  posX >= self.roomLeft and posY <= self.roomBottom and posY >= self.roomTop )
 
 	def getLeft(self):
 		return self.roomLeft
@@ -276,7 +278,50 @@ class room:
 
 			studyRoomAudioSystem    = device(707, 'studyRoomAudioSystem', 'other', 0, 0)
 			self.deviceList.append(studyRoomAudioSystem)
+            
+            
+        #dormitory
+		if (self.roomType == 'dormitory'):
+            #小爱音箱*5
+			dormitoryXiaoaiAudio1 = device(1001, 'dormitoryXiaoaiAudio1', 'audio', 0, 0)
+			self.deviceList.append(dormitoryXiaoaiAudio1)
+			dormitoryXiaoaiAudio2 = device(1002, 'dormitoryXiaoaiAudio2', 'audio', 0, 0)
+			self.deviceList.append(dormitoryXiaoaiAudio2)
+			dormitoryXiaoaiAudio3 = device(1003, 'dormitoryXiaoaiAudio3', 'audio', 0, 0)
+			self.deviceList.append(dormitoryXiaoaiAudio3)
+			dormitoryXiaoaiAudio4 = device(1004, 'dormitoryXiaoaiAudio4', 'audio', 0, 0)
+			self.deviceList.append(dormitoryXiaoaiAudio4)
+			dormitoryXiaoaiAudio5 = device(1005, 'dormitoryXiaoaiAudio5', 'audio', 0, 0)
+			self.deviceList.append(dormitoryXiaoaiAudio5)
+            #蓝牙温湿度计
+			dormitoryThermometer = device(1006, 'dormitoryThermometer', 'thermometer', 0, 0)
+			self.deviceList.append(dormitoryThermometer)
+            #摄像机
+			dormitoryCamere1 = device(1007, 'dormitoryCamere1', 'camere', 0, 0)
+			self.deviceList.append(dormitoryCamere1)
+            #门窗传感器*3
+			dormitoryDoorWindowSensor1 = device(1008, 'dormitoryDoorWindowSensor1', 'sensor', 0, 0)
+			self.deviceList.append(dormitoryDoorWindowSensor1)
+			dormitoryDoorWindowSensor2 = device(1009, 'dormitoryDoorWindowSensor2', 'sensor', 0, 0)
+			self.deviceList.append(dormitoryDoorWindowSensor2)
+			dormitoryDoorWindowSensor3 = device(1010, 'dormitoryDoorWindowSensor3', 'sensor', 0, 0)
+			self.deviceList.append(dormitoryDoorWindowSensor3)
+            #人体移动传感器*2
+			dormitoryHumanSensor1 = device(1011, 'dormitoryHumanSensor1', 'sensor', 0, 0)
+			self.deviceList.append(dormitoryHumanSensor1)   
+			dormitoryHumanSensor2 = device(1012, 'dormitoryHumanSensor2', 'sensor', 0, 0)
+			self.deviceList.append(dormitoryHumanSensor2)
+            #三开关单控开关
+			dormitoryThreeSwitch = device(1013, 'dormitoryThreeSwitch', 'switch', 0, 0)
+			self.deviceList.append(dormitoryThreeSwitch)  
+            #窗帘伴侣
+			dormitoryCurtainCompanion = device(1014, 'dormitoryCurtainCompanion', 'switch', 0, 0)
+			self.deviceList.append(dormitoryCurtainCompanion) 
+            #智能插座
+			dormitorySmartSocket = device(1015, 'dormitorySmartSocket', 'socket', 0, 0)
+			self.deviceList.append(dormitorySmartSocket) 
 
+            
 		self.setDevicesPosRandom()
 
 
@@ -338,7 +383,16 @@ class room:
 				tempDevice.setValue(value)
 				resDeviceList.append(tempDevice)
 		return resDeviceList
-
+    
+	def turnOffDeviceByTypeAndOwner(self, deviceName, deviceType, deviceID):
+		for tempDevice in self.deviceList:
+			if( tempDevice.getName() == deviceName and tempDevice.getID() == deviceID):
+				tempDevice.turnOff()
+				if(tempDevice.getType() == 'lamp'):
+					self.simL.setLightOff()
+				return tempDevice
+		return None
+        
 	# 获取房间当前亮度
 	def getLight(self, currentTime):
 		return self.simL.getCurrentLight(currentTime)
@@ -418,5 +472,5 @@ class room:
 		return res
 
 
-
+    
 

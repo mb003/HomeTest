@@ -15,7 +15,15 @@ class device:
 		"heater"         :        5,
 		"door"           :        6,
 		"window"         :        7,
-		"other"          :        8
+		"other"          :        8,
+        
+        #new
+        "audio"          :        9,
+        "switch"         :        10,
+        "camere"         :        11,
+        "thermometer"    :        12,
+        "sensor"         :        13,
+        "socket"         :        14
 	}
 
 	# typeNumToStr =        {
