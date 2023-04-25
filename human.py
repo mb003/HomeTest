@@ -106,7 +106,7 @@ class human:
 			self.moveTo(tempDeviceList[0].getPosX(), tempDeviceList[0].getPosY())
 		return tempDeviceList
 
-	# 打开一个房间内的某类设备
+	# 打开一个房间内的某类属于某人设备
 	def turnOnDeviceOfMan(self, roomType, deviceType, ID):
 		tempDeviceList = self.house.turnOnDeviceByTypeOfMan(roomType, deviceType, ID)
 		if(tempDeviceList != []):
