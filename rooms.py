@@ -355,6 +355,30 @@ class room:
 					self.simL.setLightOff()
 		return resDeviceList
 
+	# 开启某人指定设备类型的设备，返回指定类型的设备列表
+	def turnOnDeviceByType(self, deviceType, ID):
+		resDeviceList = []
+		for tempDevice in self.deviceList:
+			for ownerID in tempDevice.getOwnerID():
+				if ( tempDevice.getType() == deviceType and ownerID == ID):
+					tempDevice.turnOn()
+					resDeviceList.append(tempDevice)
+					if(tempDevice.getType() == 'lamp'):
+						self.simL.setLightOn()
+		return resDeviceList
+
+	# 关闭某人指定设备类型的设备，返回指定类型的设备列表
+	def turnOffDeviceByTypeOfMan(self, deviceType, ID):
+		resDeviceList = []
+		for tempDevice in self.deviceList:
+			for ownerID in tempDevice.getOwnerID():
+				if ( tempDevice.getType() == deviceType and ownerID == ID):
+					tempDevice.turnOff()
+					resDeviceList.append(tempDevice)
+					if(tempDevice.getType() == 'lamp'):
+						self.simL.setLightOff()
+		return resDeviceList
+
 	# 开启制定设备名的设备，返回对应设备
 	def turnOnDeviceByName(self, deviceName):
 		for tempDevice in self.deviceList:

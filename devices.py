@@ -38,7 +38,7 @@ class device:
 	# 	8                :        "other"
 	# }       
 
-	def __init__(self, code = 0, deviceName = 'None', deviceType = 'other', statu = 0, value = -1, posX = 0, posY = 0, ID = -1):
+	def __init__(self, code = 0, deviceName = 'None', deviceType = 'other', statu = 0, value = -1, posX = 0, posY = 0, ID = -1, ownerID=[]):
 		self.code        =  code
 		self.name        =  deviceName
 		self.deviceType  =  deviceType
@@ -49,6 +49,7 @@ class device:
 		self.ID          =  -1
 		self.imageOn     =  pygame.image.load('./pic/' + self.getType() + '_on.png')
 		self.imageOff    =  pygame.image.load('./pic/' + self.getType() + '_off.png')
+		self.ownerID	 =  []
 
 
 	def getCode(self):
@@ -62,6 +63,15 @@ class device:
 
 	def getID(self):
 		return self.ID
+
+	def addOwnerID(self, ownerID):
+		self.ownerID.append(ownerID)
+
+	def clearOwnerID(self, ownerID):
+		self.ownerID = []
+		
+	def getOwnerID(self):
+		return self.ownerID
 
 	def getName(self):
 		return self.name

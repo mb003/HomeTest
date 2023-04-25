@@ -7,6 +7,7 @@ import time
 from sqlManage import SQLManagement
 
 class human:
+
 	# age         =   20
 	# vigour      =   50
 	# # diligence   =   50
@@ -78,14 +79,18 @@ class human:
 
 	def initPos(self, posX = -1, posY = -1):
 		import random
+		#提供的坐标在房间范围内时直接赋值
 		if( self.house.getRoomByPos(posX, posY) != None ):
 			self.posX = posX
 			self.posY = posY
 			return
+		#提供的坐标超出房间范围时随机赋值
 		while( self.house.getRoomByPos(posX, posY) == None):
 			self.posX = random.randint(0, self.house.getWidth() - 1)
 			self.posY = random.randint(0, self.house.getHeight() - 1)
 			return
+
+	# 某些函数在对设备操作时会把人也移动到相应位置，确定是否要做到这一点
 
 	# 打开一个房间内的某类设备
 	def turnOnDevice(self, roomType, deviceType):
@@ -97,6 +102,20 @@ class human:
 	# 关闭一个房间内的某类设备
 	def turnOffDevice(self, roomType, deviceType):
 		tempDeviceList = self.house.turnOffDeviceByType(roomType, deviceType)
+		if(tempDeviceList != []):
+			self.moveTo(tempDeviceList[0].getPosX(), tempDeviceList[0].getPosY())
+		return tempDeviceList
+
+	# 打开一个房间内的某类设备
+	def turnOnDeviceOfMan(self, roomType, deviceType, ID):
+		tempDeviceList = self.house.turnOnDeviceByTypeOfMan(roomType, deviceType, ID)
+		if(tempDeviceList != []):
+			self.moveTo(tempDeviceList[0].getPosX(), tempDeviceList[0].getPosY())
+		return tempDeviceList
+	
+	# 关闭一个房间内的某类属于某人的设备
+	def turnOffDeviceOfMan(self, roomType, deviceType, ID):
+		tempDeviceList = self.house.turnOffDeviceByTypeOfMan(roomType, deviceType, ID)
 		if(tempDeviceList != []):
 			self.moveTo(tempDeviceList[0].getPosX(), tempDeviceList[0].getPosY())
 		return tempDeviceList
@@ -180,6 +199,8 @@ class human:
 	# 	print('Turn off all TVs.')
 	# 	self.turnOffAllByDeviceType('TV')
 
+	#一些打开/关闭设备函数中是按类来对设备操作，确定是否要做到这一点
+
 	# 打开所在房间的设备
 	def turnOnDeviceInRoom(self, deviceType):
 		tempRoom = self.house.getRoomByPos(self.posX, self.posY)
@@ -201,6 +222,38 @@ class human:
 		tempRoom = self.house.getRoomByPos(self.posX, self.posY)
 		if (tempRoom != None):
 			tempDeviceList = self.turnOffDevice(tempRoom.getType(), deviceType)
+			if (tempDeviceList != [] ):
+				tempDevice = tempDeviceList[0]
+				self.moveTo( tempDevice.getPosX(), tempDevice.getPosY() )
+				# print('Turn off ', deviceType, ' in ', tempRoom.getType())
+				return True
+			else:
+				return False
+		else:
+			print('Not in any room')
+			return False
+
+	# 打开所在房间 某人 的设备
+	def turnOnDeviceInRoomOfMan(self, deviceType, ID):
+		tempRoom = self.house.getRoomByPos(self.posX, self.posY)
+		if (tempRoom != None):
+			tempDeviceList = self.turnOnDeviceOfMan(tempRoom.getType(), deviceType, ID)
+			if ( tempDeviceList !=[] ):
+				tempDevice = tempDeviceList[0]
+				self.moveTo( tempDevice.getPosX(), tempDevice.getPosY() )
+				# print('Turn on ', deviceType, ' in ', tempRoom.getType())
+				return True
+			else:
+				return False
+		else:
+			print('Not in any room')
+			return False
+	
+	# 关闭所在房间 某人 的设备
+	def turnOffDeviceInRoomOfMan(self, deviceType, ID):
+		tempRoom = self.house.getRoomByPos(self.posX, self.posY)
+		if (tempRoom != None):
+			tempDeviceList = self.turnOffDeviceOfMan(tempRoom.getType(), deviceType, ID)
 			if (tempDeviceList != [] ):
 				tempDevice = tempDeviceList[0]
 				self.moveTo( tempDevice.getPosX(), tempDevice.getPosY() )
@@ -341,64 +394,66 @@ class human:
 	# def closeHomeDoor(self):
 	# 	print('Close the home door.')
 
+	#获取X坐标
 	def getPosX(self):
 		return self.posX
-
+	#获取Y坐标
 	def getPosY(self):
 		return self.posY
-
+	#获取活力
 	def getVigour(self):
 		return self.vigour
-
+	#设置活力
 	def setVigour(self, vigour):
 		self.vigour = vigour
-
+	#获取生活规律性
 	def getRegular(self):
 		return self.regular
-
+	#设置生活规律性
 	def setRegular(self, regular):
 		self.regular = regular
-
+	#获取细心程度
 	def getCarefulness(self):
 		return self.carefulness
-
+	#设置细心程度
 	def setCarefulness(self, carefulness):
 		self.carefulness = carefulness
-
+	#获取当前时间
 	def getCurrentTime(self):
 		return self.currentTime
-
+	#格式化获取当前时间
 	def getCurrentTimeStr(self):
 		return time.strftime("%H:%M:%S", time.localtime(self.getCurrentTime()))
-
+	#设置当前时间
 	def setCurrentTime(self, currentTime):
 		self.currentTime = currentTime
-
+	#获取温度
 	def getSimT(self):
 		return self.simT
-
+	#获取房屋
 	def getHouse(self):
 		return self.house
-
+	#获取坐标
 	def getPos(self):
 		return (self.getPosX(), self.getPosY())
-
+	#获取是否在家
 	def isInHome(self):
 		return self.inHome
-
+	#调整是否在家
 	def leaveHome(self):
 		self.inHome = False
 		self.moveTo(0, 0)
 
 	def goBackHome(self):
 		self.inHome = True
-
+	#设置是否随机移动
 	def setRandomMove(self, isRandomMove = True):
 		self.isRandomMove = isRandomMove
-
+	#获取睡觉状态
 	def isSleeping(self):
 		return self.flagSleeping
 
+	#调整睡觉状态
 	def goToSleep(self):
 		self.flagSleeping = True
 		self.setRandomMove(False)
@@ -406,17 +461,17 @@ class human:
 	def wakeUp(self):
 		self.flagSleeping = False
 		self.setRandomMove(True)
-
+	#获取当前所在房间
 	def getNowRoom(self):
 		return self.getHouse().getRoomByPos( self.getPosX(), self.getPosY() )
-
+	#获取当前所在房间的类型
 	def getNowRoomType(self):
 		tempRoom = self.getHouse().getRoomByPos( self.getPosX(), self.getPosY() )
 		if (tempRoom == None):
 			return None
 		else:	
 			return tempRoom.getType()
-
+	#打印当前人的状态（包括人所在位置的房屋地图）
 	def printNowStatu(self):
 		print('Time:	', self.getCurrentTimeStr(), '	Temperature:	', self.simT.getCurrentTemperature())
 		houseMap = self.getHouse().printHouseInfo()
@@ -425,7 +480,7 @@ class human:
 			for j in range(self.getHouse().getWidth()):
 					print(houseMap[i][j],)
 			print('')
-
+	#输出当前人的状态（包括人所在位置的房屋地图）
 	def writeNowStatu(self, fp):
 		fp.write ('Time:	' + self.getCurrentTimeStr() + '	Temperature:	%f'  %self.simT.getCurrentTemperature() + '\n')
 		houseMap = self.getHouse().printHouseInfo()
@@ -434,7 +489,7 @@ class human:
 			for j in range(self.getHouse().getWidth()):
 					fp.write(houseMap[i][j])
 			fp.write('\n')
-
+	#获取有人所在位置的房屋地图
 	def getMap(self):
 		houseMap = self.getHouse().printHouseInfo()
 		houseMap[self.posY][self.posX] = 'M'
@@ -498,7 +553,7 @@ class human:
 		res = self.sqlMana.query(sql)
 		if(len(res) > 0):
 			sql = "update human set age = %d, vigour = %d, regular = %d, carefulness = %d, posX = %lf, posY = %lf, inHome = %d,  isRandomMove = %d, flagSleeping = %d where ID = %d" %(self.age, self.vigour, self.regular, self.carefulness, self.posX, self.posY, self.inHome, self.isRandomMove, self.flagSleeping ,self.ID)
-			sqlMana.update(sql)
+			self.sqlMana.update(sql)
 		else:
 			sql = "insert into human (age, vigour, regular, carefulness, posX, posY, inHome, isRandomMove, flagSleeping) values (%d, %d, %d, %d, %lf, %lf, %d, %d, %d)" %(self.age, self.vigour, self.regular, self.carefulness, self.posX, self.posY, self.inHome, self.isRandomMove, self.flagSleeping)
 			self.sqlMana.insert(sql)
