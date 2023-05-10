@@ -13,36 +13,32 @@ weekdayEventTimeList = {
 	"07:55:00"      :      "wakeUp",
 	"08:10:00"      :      "eatDinner",
 	"08:30:00"      :      "goToSchool",
-	"11:30:00"      :      "cook",
+	# "11:30:00"      :      "cook",
 	"12:10:00"      :      "eatDinner",
 	"18:30:00"      :      "goHome",
-	"18:45:00"      :      "cook",
+	# "18:45:00"      :      "cook",
 	"19:25:00"      :      "eatDinner",
-	"19:45:00"      :      "watchTV",
+	# "19:45:00"      :      "watchTV",
 	"22:45:00"      :      "takeAShowerStart",
 	"23:30:00"      :      "goToSleep"
 }
 
 weekendEventTimeList = {
 	"08:55:00"      :      "wakeUp",
-	"11:30:00"      :      "cook",
+	# "11:30:00"      :      "cook",
 	"12:10:00"      :      "eatDinner",
-	"18:45:00"      :      "cook",
+	# "18:45:00"      :      "cook",
 	"19:25:00"      :      "eatDinner",
-	"19:45:00"      :      "watchTV",
+	# "19:45:00"      :      "watchTV",
 	"22:45:00"      :      "takeAShowerStart",
 	"23:59:00"      :      "goToSleep"
 }
 
 
 roomList = {
-	"livingRoom",
-	"masterBedroom",
-	# "secondBedroom",
 	"bathroom",
-	"kitchen",
-	"diningRoom",
-	"studyRoom"
+	"dormitory",
+	"diningRoom"
 }
 
 
@@ -68,10 +64,10 @@ currentTime = startTime
 # Human init
 person = human(-1, 25, 50, 90, 95, 1, 3, currentTime)
 person.readHumanFromDB(ID = 25)
-# person.initHouse(roomList = roomList, width = 40, height = 40)
+person.initHouse(roomList = roomList, width = 40, height = 40)
 person.initPos()
-person.moveToRoom('masterBedroom')
-# person.saveInfoToDB()
+person.moveToRoom('dormitory')
+person.saveInfoToDB()
 
 # Event queue init
 eventQueue = deque()
@@ -121,15 +117,21 @@ def enviromentEventDispatch(man):
 					newEvent = event(man.getCurrentTime(), "turnOffAirCondition") 
 					eventQueue.append(newEvent)
 
-	# 湿度不适宜时开启加湿器
 
 	# 光照过暗时开灯
 	if ( man.isInHome() and not man.isSleeping()):
 		tempRoom = man.getNowRoom()
-		if ( tempRoom.isDarkness(man.getCurrentTime()) ):
-			if (random.randint(0,100) < 98):
-				newEvent = event(man.getCurrentTime(), "turnOnLampInRoom")
-				eventQueue.appendleft(newEvent)
+		try:
+			if(tempRoom.roomType != 'dormitory'):
+				return 
+			if ( tempRoom.isDarkness(man.getCurrentTime()) ):
+				if (random.randint(0,100) < 98):
+					newEvent = event(man.getCurrentTime(), "turnOnLampInRoom")
+					eventQueue.appendleft(newEvent)
+		except Exception as e:
+			print(e)
+			print("posX,posY",man.posX,man.posY)
+			exit(0)
 
 	# 关掉不在的房间的灯
 	if ( man.isInHome() and not man.isSleeping() ):
@@ -143,7 +145,7 @@ def enviromentEventDispatch(man):
 		if( len(eventQueue) == 0 ):
 			percent = timeSlot * 1.0 / ( random.randint(20,50) * 60) * man.getVigour()
 			if (random.uniform(0,100) < percent):
-				randomEventList = ['readBook', 'watchTV', 'playVideoGame', 'defaultEvent']
+				randomEventList = [ 'defaultEvent'] #待添加 TODO
 				eventNum = random.randint(0, len(randomEventList)-1)
 				newEvent = event(man.getCurrentTime(), randomEventList[eventNum])
 				eventQueue.append(newEvent)
@@ -166,7 +168,7 @@ def eventManage(man):
 	if(man.getCurrentTime() < tempEvent.getTimestamp()):
 		eventQueue.appendleft(tempEvent)
 	else:
-		nextEvent = tempEvent.eventRun(man)
+		nextEvent = tempEvent.eventRun(man)#事件引发的次生事件
 		if(nextEvent != None):
 			eventQueue.appendleft(nextEvent)
 
@@ -175,6 +177,8 @@ from paintmod import paintMod
 housePainter = paintMod()
 
 paint_count = 0
+
+person.add_colum_into_DB()
 
 # Main loop
 while(person.getCurrentTime() < endTime):
@@ -186,7 +190,7 @@ while(person.getCurrentTime() < endTime):
 
 	if(not housePainter.isRun()):
 		continue
-
+	
 	person.iterateTime(timeSlot)
 	person.iterateT(timeSlot)
 

@@ -123,7 +123,7 @@ class house:
 	# 在住房中添加房屋
 	def appendRoom(self, ID, roomType, centerPosX, centerPosY, width, height):
 		newRoom = room(-1, roomType, centerPosX, centerPosY, width, height)
-		roomList.append(newRoom)
+		self.roomList.append(newRoom)
 		return 
 
 	# 打印房间信息及房间结构草图
@@ -209,6 +209,17 @@ class house:
 					flag = False
 			if (flag):
 				tempRoom.turnOffDeviceByType(deviceType)
+
+	# 打开属于某个人的指定类型的设备
+	def turnOnAllByDeviceTypeAndOnwner(self, ManID, deviceType):
+		for tempRoom in self.roomList:
+			tempRoom.turnOnDeviceByTypeAndOwner(deviceType,ManID)
+
+	# 关闭属于某个人的指定类型的设备
+	def turnOffAllByDeviceTypeAndOnwner(self, ManID, deviceType):
+		for tempRoom in self.roomList:
+			tempRoom.turnOffDeviceByTypeAndOwner(deviceType,ManID)
+	
 
 	# 获得距离最近的指定类型设备
 	def getNearDevice(self, posX, posY, deviceType):

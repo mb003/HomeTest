@@ -8,14 +8,8 @@ class room:
 
 
 	roomDict    =   {
-		"livingRoom"           :           0,
-		"masterBedroom"        :           100,
-		"secondBedroom"        :           200,
-		"thirdBedroom"         :           300,
 		"bathroom"             :           400,
-		"kitchen"              :           500,
 		"diningRoom"           :           600,
-		"studyRoom"            :           700,
         "dormitory"            :           1000
 	}
 
@@ -101,15 +95,15 @@ class room:
         #dormitory
 		if (self.roomType == 'dormitory'):
             #小爱音箱*5
-			dormitoryXiaoaiAudio1 = device(1001, 'dormitoryXiaoaiAudio1', 'audio', 0, 0)
+			dormitoryXiaoaiAudio1 = device(1001, 'dormitoryXiaoaiAudio1', 'voice_assistant', 0, 0)
 			self.deviceList.append(dormitoryXiaoaiAudio1)
-			dormitoryXiaoaiAudio2 = device(1002, 'dormitoryXiaoaiAudio2', 'audio', 0, 0)
+			dormitoryXiaoaiAudio2 = device(1002, 'dormitoryXiaoaiAudio2', 'voice_assistant', 0, 0)
 			self.deviceList.append(dormitoryXiaoaiAudio2)
-			dormitoryXiaoaiAudio3 = device(1003, 'dormitoryXiaoaiAudio3', 'audio', 0, 0)
+			dormitoryXiaoaiAudio3 = device(1003, 'dormitoryXiaoaiAudio3', 'voice_assistant', 0, 0)
 			self.deviceList.append(dormitoryXiaoaiAudio3)
-			dormitoryXiaoaiAudio4 = device(1004, 'dormitoryXiaoaiAudio4', 'audio', 0, 0)
+			dormitoryXiaoaiAudio4 = device(1004, 'dormitoryXiaoaiAudio4', 'voice_assistant', 0, 0)
 			self.deviceList.append(dormitoryXiaoaiAudio4)
-			dormitoryXiaoaiAudio5 = device(1005, 'dormitoryXiaoaiAudio5', 'audio', 0, 0)
+			dormitoryXiaoaiAudio5 = device(1005, 'dormitoryXiaoaiAudio5', 'voice_assistant', 0, 0)
 			self.deviceList.append(dormitoryXiaoaiAudio5)
             #蓝牙温湿度计
 			dormitoryThermometer = device(1006, 'dormitoryThermometer', 'thermometer', 0, 0)
@@ -139,10 +133,21 @@ class room:
 			dormitorySmartSocket = device(1015, 'dormitorySmartSocket', 'socket', 0, 0)
 			self.deviceList.append(dormitorySmartSocket) 
 
-            
+			#寝室门
+			dormitoryDoor =  device(1016, 'dormitoryDoor', 'door', 0, 0)
+			self.deviceList.append(dormitoryDoor)
+
+            #寝室空调
+			dormitoryAircondition = device(1017, 'dormitoryAircondition', 'airCondition', 0, 0)
+			self.deviceList.append(dormitoryAircondition)
+
+			#寝室灯
+			dormitoryLamp = device(1018, 'dormitoryLampOfAll', 'lamp',0,0)
+			self.deviceList.append(dormitoryLamp)
+
 		self.setDevicesPosRandom()
 
-
+	#随机摆放设备位置
 	def setDevicesPosRandom(self):
 		for tempDevice in self.deviceList:
 			tempDevice.setRandomDevicePos(self.roomLeft, self.roomRight, self.roomTop, self.roomBottom)
@@ -202,7 +207,7 @@ class room:
 				resDeviceList.append(tempDevice)
 		return resDeviceList
     
-	#根据类型和拥有者来打开设备，返回设备
+	# 根据类型和拥有者来打开设备，返回设备
 	def turnOnDeviceByTypeAndOwner(self,  deviceType, OwnerID):
 		for tempDevice in self.deviceList:
 			if( tempDevice.getType() == deviceType and tempDevice.getOwner() == OwnerID):
@@ -212,16 +217,16 @@ class room:
 				return tempDevice
 		return None
 	
-	#根据类型和拥有者来关闭设备，返回设备
+	# 根据类型和拥有者来关闭设备，返回设备
 	def turnOffDeviceByTypeAndOwner(self, deviceType, OwnerID):
 		for tempDevice in self.deviceList:
-			if( tempDevice.getType() == deviceType and tempDevice.getOwner() == OwnerID):
+			if( tempDevice.getType() == deviceType and (tempDevice.getOwner() == OwnerID or tempDevice.getOwner() == -1) ):
 				tempDevice.turnOff()
 				if(tempDevice.getType() == 'lamp'):
 					self.simL.setLightOff()
 				return tempDevice
 		return None
-        
+
 	# 获取房间当前亮度
 	def getLight(self, currentTime):
 		return self.simL.getCurrentLight(currentTime)

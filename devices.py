@@ -38,7 +38,7 @@ class device:
 	# 	8                :        "other"
 	# }       
 
-	def __init__(self, code = 0, deviceName = 'None', deviceType = 'other', statu = 0, value = -1, posX = 0, posY = 0, ID = -1):
+	def __init__(self, code = 0, deviceName = 'None', deviceType = 'other', statu = 0, value = -1, posX = 0, posY = 0, ID = -1, ownerID = -1):
 		self.code        =  code
 		self.name        =  deviceName
 		self.deviceType  =  deviceType
@@ -49,6 +49,7 @@ class device:
 		self.ID          =  -1
 		self.imageOn     =  pygame.image.load('./pic/' + self.getType() + '_on.png')
 		self.imageOff    =  pygame.image.load('./pic/' + self.getType() + '_off.png')
+		self.ownerList	 = ownerID
 
 
 	def getCode(self):
@@ -174,6 +175,70 @@ class device:
 			tempPosY = random.randint(roomTop, roomBottom)
 			self.setPos(tempPosX, tempPosY)
 			# print('heater', self.getPosX(), self.getPosY())
+		# 随机定义位置
+		if(self.deviceType == 'sensor'):
+			tempPosX = random.randint(roomLeft, roomRight)
+			tempPosY = random.randint(roomTop, roomBottom)
+			self.setPos(tempPosX, tempPosY)
+
+		if(self.deviceType == 'thermometer'):
+			tempPosX = random.randint(roomLeft, roomRight)
+			tempPosY = random.randint(roomTop, roomBottom)
+			self.setPos(tempPosX, tempPosY)
+
+		if(self.deviceType == 'voice_assistant'):
+			tempPosX = random.randint(roomLeft, roomRight)
+			tempPosY = random.randint(roomTop, roomBottom)
+			self.setPos(tempPosX, tempPosY)
+
+		if(self.deviceType == 'camere'):
+			direction = random.randint(1, 4)
+			if(direction == 1):
+				tempPosX = roomLeft
+				tempPosY = random.randint(roomTop, roomBottom)
+			if(direction == 2):
+				tempPosX = roomRight
+				tempPosY = random.randint(roomTop, roomBottom)
+			if(direction == 3):
+				tempPosY = roomTop
+				tempPosX = random.randint(roomLeft, roomRight)
+			if(direction == 4):
+				tempPosY = roomBottom
+				tempPosX = random.randint(roomLeft, roomRight)
+			self.setPos(tempPosX, tempPosY)
+
+		if(self.deviceType == 'switch'):
+			direction = random.randint(1, 4)
+			if(direction == 1):
+				tempPosX = roomLeft
+				tempPosY = random.randint(roomTop, roomBottom)
+			if(direction == 2):
+				tempPosX = roomRight
+				tempPosY = random.randint(roomTop, roomBottom)
+			if(direction == 3):
+				tempPosY = roomTop
+				tempPosX = random.randint(roomLeft, roomRight)
+			if(direction == 4):
+				tempPosY = roomBottom
+				tempPosX = random.randint(roomLeft, roomRight)
+			self.setPos(tempPosX, tempPosY)
+
+		if(self.deviceType == 'socket'):
+			direction = random.randint(1, 4)
+			if(direction == 1):
+				tempPosX = roomLeft
+				tempPosY = random.randint(roomTop, roomBottom)
+			if(direction == 2):
+				tempPosX = roomRight
+				tempPosY = random.randint(roomTop, roomBottom)
+			if(direction == 3):
+				tempPosY = roomTop
+				tempPosX = random.randint(roomLeft, roomRight)
+			if(direction == 4):
+				tempPosY = roomBottom
+				tempPosX = random.randint(roomLeft, roomRight)
+			self.setPos(tempPosX, tempPosY)
+
 		if(self.deviceType == 'door'):
 			direction = random.randint(1, 4)
 			if(direction == 1):
@@ -208,6 +273,7 @@ class device:
 				tempPosX = random.randint(roomLeft, roomRight)
 			self.setPos(tempPosX, tempPosY)
 			# print('window',  self.getPosX(), self.getPosY())
+
 		if(self.deviceType == 'other'):
 			tempPosX = random.randint(roomLeft, roomRight)
 			tempPosY = random.randint(roomTop, roomBottom)
@@ -272,4 +338,6 @@ class device:
 		}
 		return res
 
-		
+	# 获取设备的所有者
+	def getOwner(self):
+		return 

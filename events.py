@@ -36,7 +36,7 @@ class event:
 		if(random.uniform(0,100) < man.getVigour()):
 			man.turnOnDevice('dormitory', 'lamp')
 		if(random.uniform(0,100) < man.getRegular()):
-			man.turnOnDevice('dormitory', 'TV')
+			man.turnOnDevice('dormitory', 'computer')
 		return None
 
 	# 睡觉事件（计划事件）
@@ -71,25 +71,26 @@ class event:
 
 	# 起床事件（计划事件）
 	def wakeUp(self, man):
+		
 		if(not man.isInHome()):
 			return None
 		print('\nRule:	wake up.')
 		man.wakeUp()
 		#人体传感器检测到人体移动，在下面桌子上
-		man.turnOnDevice('dormitory','humanSensor')
+		man.turnOnDevice('dormitory','sensor')
 		#太暗了就开灯，这个灯是共用灯
 		if(man.getNowRoom().isDarkness(man.getCurrentTime())):
 			self.turnOnLampInRoom(man)
 		#开门，去刷牙
 		man.turnOnDevice('dormitory', 'door')
 		man.turnOffDevice('dormitory', 'door')
-		man.moveTo('bathroom')
+		man.moveToRoom('bathroom')
 		#刷牙, 2-15分钟
 		lockEvent = event(man.getCurrentTime() + random.randint(2, 15)*60, "defaultEvent")
 		#刷完牙回寝
 		man.turnOnDevice('dormitory', 'door')
 		man.turnOffDevice('dormitory', 'door')
-		man.moveTo('dormitory')
+		man.moveToRoom('dormitory')
 		return lockEvent
 
 	# 读书事件（计划事件）
@@ -321,16 +322,13 @@ class event:
 		"readBook"            :        readBook,
 		"takeAShowerStart"    :        takeAShowerStart,
 		"takeAShowerEnd"      :        takeAShowerEnd,
-		"watchTV"             :        watchTV,
 		"eatDinner"           :        eatDinner,
-		"cook"                :        cook,
 		"adjustTemprature"    :        adjustTemprature,
 		"toiletStart"         :        toiletStart,
 		"toiletEnd"           :        toiletEnd,
 		# "turnOnAirCondition"  :        turnOnAirCondition,
 		"turnOffAirCondition" :        turnOffAirCondition,
 		"turnOnLampInRoom"    :        turnOnLampInRoom,
-		"turnOffAllTV"        :        turnOffAllTV,
 		"turnOffAllSundries"  :        turnOffAllSundries,
 		"playVideoGame"       :        playVideoGame,
 		"turnOffOtherRoomLamp":        turnOffOtherRoomLamp,
@@ -348,5 +346,10 @@ class event:
 		return self.timestamp
 
 	def eventRun(self, man):
-		# print('eventRun:     ', self.eventType)
-		return self.info.get(self.eventType)(self, man)
+		print('eventRun:     ', self.eventType)
+		try:
+			return self.info.get(self.eventType)(self, man)
+		except  Exception as e:
+			print(e)
+			print("eventType",self.eventType)
+			exit(0)

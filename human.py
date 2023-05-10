@@ -120,6 +120,14 @@ class human:
 	def turnOffAllByDeviceType(self, deviceType, exceptRoomTypeList = []):
 		self.house.turnOffAllByDeviceType(deviceType, exceptRoomTypeList)
 
+	# 打开属于某个人的某种类型的设备
+	def turnOnDeviceInRoomOfManSelf(self, deviceType ):
+		self.house.turnOnAllByDeviceTypeAndOnwner(self.ID, deviceType)
+
+	# 关闭属于某个人的某种类型的设备
+	def turnOffDeviceInRoomOfManSelf(self, deviceType ):
+		self.house.turnOffAllByDeviceTypeAndOnwner(self.ID, deviceType)
+
 	# 移动到某位置
 	def moveTo(self, posX, posY):
 		if ( posX < self.house.getWidth() and posY < self.house.getHeight() ):
@@ -498,7 +506,7 @@ class human:
 		res = self.sqlMana.query(sql)
 		if(len(res) > 0):
 			sql = "update human set age = %d, vigour = %d, regular = %d, carefulness = %d, posX = %lf, posY = %lf, inHome = %d,  isRandomMove = %d, flagSleeping = %d where ID = %d" %(self.age, self.vigour, self.regular, self.carefulness, self.posX, self.posY, self.inHome, self.isRandomMove, self.flagSleeping ,self.ID)
-			sqlMana.update(sql)
+			self.sqlMana.update(sql)
 		else:
 			sql = "insert into human (age, vigour, regular, carefulness, posX, posY, inHome, isRandomMove, flagSleeping) values (%d, %d, %d, %d, %lf, %lf, %d, %d, %d)" %(self.age, self.vigour, self.regular, self.carefulness, self.posX, self.posY, self.inHome, self.isRandomMove, self.flagSleeping)
 			self.sqlMana.insert(sql)
@@ -513,6 +521,16 @@ class human:
 		res = self.sqlMana.query(sql)
 		temp = res[0]
 		self.house.readInfoFromDB(ID = temp.get('ID'), sqlMana = self.sqlMana)
+	
+	# 向数据库record 中插入新的列
+	def add_colum_into_DB(self):
+		column_names = [item for (item,value) in self.house.getInfo(self.currentTime).items()]
+		for column in column_names:
+			try:
+				self.sqlMana.insert("alter table record add column %s int(32) not null"%column)
+			except:
+				print("%s define twice.\n",column)
+		return None
 
 	# 存储一条记录
 	def saveRecord(self):
@@ -538,5 +556,9 @@ class human:
 		sql = sql + "'"
 		sql = sql + timeStr
 		sql = sql + "')"
-		self.sqlMana.insert(sql)
+		try:
+			self.sqlMana.insert(sql)
+		except:
+			print("sql \n Error!",sql)
+			exit(0)
 		return True

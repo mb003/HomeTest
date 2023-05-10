@@ -9,25 +9,15 @@ class paintMod:
 
     def __init__(self, screenSize = (1280, 720), backgroundColor = (255, 255, 255)):
         self.floorColor = {
-            "livingRoom"           :           (189, 33, 25),
-            "masterBedroom"        :           (247, 148,99),
-            "secondBedroom"        :           (255, 230, 8),
-            "thirdBedroom"         :           (214, 148, 25),
+            "dormitory"           :           (189, 33, 25),
             "bathroom"             :           (41, 181, 206),
-            "kitchen"              :           (247, 255, 247),
-            "diningRoom"           :           (115, 123, 181),
-            "studyRoom"            :           (82, 82, 41)
+            "diningRoom"           :           (115, 123, 181)
         }
 
         self.wallColor = {
-            "livingRoom"           :           (164, 8, 0),
-            "masterBedroom"        :           (222, 123, 74),
-            "secondBedroom"        :           (230, 205, 0),
-            "thirdBedroom"         :           (189, 123, 0),
+            "dormitory"              :           (164, 8, 0),
             "bathroom"             :           (16, 156, 181),
-            "kitchen"              :           (222, 230, 222),
-            "diningRoom"           :           (90, 98, 156),
-            "studyRoom"            :           (57, 57, 17)
+            "diningRoom"           :           (90, 98, 156)
         }
 
         self.isRunning = True
