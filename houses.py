@@ -170,6 +170,20 @@ class house:
 				return tempRoom.turnOffDeviceByType(deviceType)
 		return []
 
+	# 开启指定房间内 某人 指定设备类型的设备，返回设备列表
+	def turnOnDeviceByTypeOfMan(self, roomType, deviceType, ID):
+		for tempRoom in self.roomList:
+			if ( tempRoom.getType() == roomType ):
+				return tempRoom.turnOnDeviceByTypeOfMan(deviceType,ID)
+		return []
+		
+	# 关闭指定房间内 某人 的指定设备类型的设备，返回设备列表
+	def turnOffDeviceByTypeOfMan(self, roomType, deviceType, ID):
+		for tempRoom in self.roomList:
+			if ( tempRoom.getType() == roomType ):
+				return tempRoom.turnOffDeviceByTypeOfMan(deviceType,ID)
+		return []
+
 	# 开启指定房间内指定设备名的设备，返回对应设备
 	def turnOnDeviceByName(self, roomType, deviceName):
 		for tempRoom in self.roomList:
