@@ -74,8 +74,8 @@ class human:
 
 
 
-	def initHouse(self, ID = -1, roomList = [], width = 20, height = 20):
-		self.house = house(ID, roomList, width, height)
+	def initHouse(self, house):
+		self.house = house
 
 	def initPos(self, posX = -1, posY = -1):
 		import random
@@ -401,7 +401,8 @@ class human:
 
 	# def closeHomeDoor(self):
 	# 	print('Close the home door.')
-
+	def getID(self):
+		return self.ID 
 	#获取X坐标
 	def getPosX(self):
 		return self.posX
@@ -541,7 +542,7 @@ class human:
 				return False
 			else:
 				temp = res[0]
-				self.ID            = int(temp.get("ID"))
+				#self.ID            = int(temp.get("ID"))
 				self.age           = int(temp.get("age"))
 				self.vigour        = int(temp.get("vigour"))
 				self.regular       = int(temp.get("regular"))

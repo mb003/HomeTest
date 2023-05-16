@@ -2,6 +2,7 @@
 
 from human import human
 from devices import device
+from houses import house
 import time
 import random
 from collections import deque
@@ -60,20 +61,55 @@ currentTime = startTime
 
 # fp = open('test.txt', 'w')
 
+mainHouse = house(roomList = roomList, width = 30, height = 20,currentTime=currentTime)
 
 # Human init
-person = human(-1, 25, 50, 90, 95, 1, 3, currentTime)
+person = human(0, 25, 50, 90, 95, 1, 3, currentTime)
 person.readHumanFromDB(ID = 25)
-person.initHouse(roomList = roomList, width = 40, height = 40)
-person.initPos()
+person.initHouse(mainHouse)
+person.initPos(0,0)
 person.moveToRoom('dormitory')
-person.saveInfoToDB()
+#person.saveInfoToDB()
+
+two = human(1, 25, 50, 90, 95, 1, 3, currentTime)
+two.readHumanFromDB(ID = 25)
+two.initHouse(mainHouse)
+two.initPos(0,2)
+two.moveToRoom('dormitory')
+#two.saveInfoToDB()
+
+three = human(2, 25, 50, 90, 95, 1, 3, currentTime)
+three.readHumanFromDB(ID = 25)
+three.initHouse(mainHouse)
+three.initPos(0,2)
+three.moveToRoom('dormitory')
+#three.saveInfoToDB()
+
+four = human(3, 25, 50, 90, 95, 1, 3, currentTime)
+four.readHumanFromDB(ID = 25)
+four.initHouse(mainHouse)
+four.initPos(0,2)
+four.moveToRoom('dormitory')
+#four.saveInfoToDB()
+
+five = human(4, 25, 50, 90, 95, 1, 3, currentTime)
+five.readHumanFromDB(ID = 25)
+five.initHouse(mainHouse)
+five.initPos(0,2)
+five.moveToRoom('dormitory')
+#five.saveInfoToDB()
+humanlist = [person,two,three,four,five]
 
 # Event queue init
-eventQueue = deque()
-
+queues = []
+for i in range(len(humanlist)):
+	print(humanlist[i].getID())
+	a = deque()
+	queues.append(a)
+print(len(queues))
 # Event dispatch 计划事件分配
 def timeEventDispatch(man):
+	#man = random.choice(humanlist)
 	# Time event
 	week = int( time.strftime( "%w" , time.localtime(man.getCurrentTime() ) ) )
 	if week <= 5:
@@ -81,16 +117,17 @@ def timeEventDispatch(man):
 		if(weekdayEventTimeList.get(time.strftime("%H:%M:%S" , time.localtime(man.getCurrentTime())))  !=  None):
 			eventType =  weekdayEventTimeList.get( time.strftime("%H:%M:%S" , time.localtime(man.getCurrentTime())) ) 
 			newEvent = event(man.getCurrentTime(), eventType)
-			eventQueue.append(newEvent)
+			queues[man.getID()].append(newEvent)
 	else:
 		# 周末计划事件
 		if(weekendEventTimeList.get(time.strftime("%H:%M:%S" , time.localtime(man.getCurrentTime())))  !=  None):
 			eventType =  weekendEventTimeList.get( time.strftime("%H:%M:%S" , time.localtime(man.getCurrentTime())) ) 
 			newEvent = event(man.getCurrentTime(), eventType)
-			eventQueue.append(newEvent)
+			queues[man.getID()].append(newEvent)
 
 # Enviroment event 条件事件分配
 def enviromentEventDispatch(man):
+	#man = random.choice(humanlist)
 	# 不在家时不分配事件
 	if( not person.isInHome() ):
 		return
@@ -102,7 +139,7 @@ def enviromentEventDispatch(man):
 			percent *= 0.001
 		if (random.uniform(0,100) < percent):
 			newEvent = event(man.getCurrentTime(), "adjustTemprature")
-			eventQueue.append(newEvent)
+			queues[man.getID()].append(newEvent)
 
 	# 随机关闭空调
 	if( man.isInHome() and (not man.isSleeping()) and man.getSimT().isTemperatureBeenSet() ):
@@ -115,7 +152,7 @@ def enviromentEventDispatch(man):
 				# fp.write( time.strftime("%H:%M:%S", time.localtime(person.getCurrentTime())) + '	 %f\n' %percent)
 				if(random.uniform(0,100) < percent):
 					newEvent = event(man.getCurrentTime(), "turnOffAirCondition") 
-					eventQueue.append(newEvent)
+					queues[man.getID()].append(newEvent)
 
 
 	# 光照过暗时开灯
@@ -127,7 +164,7 @@ def enviromentEventDispatch(man):
 			if ( tempRoom.isDarkness(man.getCurrentTime()) ):
 				if (random.randint(0,100) < 98):
 					newEvent = event(man.getCurrentTime(), "turnOnLampInRoom")
-					eventQueue.appendleft(newEvent)
+					queues[man.getID()].appendleft(newEvent)
 		except Exception as e:
 			print(e)
 			print("posX,posY",man.posX,man.posY)
@@ -138,39 +175,40 @@ def enviromentEventDispatch(man):
 		percent = timeSlot * 1.0 / (3*60) * man.getVigour()
 		if(random.uniform(0,100) < percent):
 			newEvent = event(man.getCurrentTime(), "turnOffOtherRoomLamp")
-			eventQueue.appendleft(newEvent)
+			queues[man.getID()].appendleft(newEvent)
 
 	# 如果当前没有事情，随机找事情做
 	if (man.isInHome() and not man.isSleeping()):
-		if( len(eventQueue) == 0 ):
+		if( len(queues[man.getID()]) == 0 ):
 			percent = timeSlot * 1.0 / ( random.randint(20,50) * 60) * man.getVigour()
 			if (random.uniform(0,100) < percent):
 				randomEventList = [ 'defaultEvent'] #待添加 TODO
 				eventNum = random.randint(0, len(randomEventList)-1)
 				newEvent = event(man.getCurrentTime(), randomEventList[eventNum])
-				eventQueue.append(newEvent)
+				queues[man.getID()].append(newEvent)
 
 	# 事件队列为空时，随机去卫生间
 	if (man.isInHome() and not man.isSleeping()):
-		if( len(eventQueue) == 0 ):
+		if( len(queues[man.getID()]) == 0 ):
 			percent = timeSlot * 1.0 / ( random.randint(30,700) * 60) * man.getVigour()
 			if (random.uniform(0,100) < percent):
 				newEvent = event(man.getCurrentTime(), "toiletStart")
-				eventQueue.append(newEvent)
+				queues[man.getID()].append(newEvent)
 
 	# print('eventDispatch', time.strftime("%Y %m %d %H:%M:%S" , time.localtime(currentTime)))
 
 # Event manage 事件执行
 def eventManage(man):
-	if( len(eventQueue) == 0 ):
+	#man = random.choice(humanlist)
+	if( len(queues[man.getID()]) == 0 ):
 		return
-	tempEvent = eventQueue.popleft()
+	tempEvent = queues[man.getID()].popleft()
 	if(man.getCurrentTime() < tempEvent.getTimestamp()):
-		eventQueue.appendleft(tempEvent)
+		queues[man.getID()].appendleft(tempEvent)
 	else:
 		nextEvent = tempEvent.eventRun(man)#事件引发的次生事件
 		if(nextEvent != None):
-			eventQueue.appendleft(nextEvent)
+			queues[man.getID()].appendleft(nextEvent)
 
 from paintmod import paintMod
 
@@ -185,22 +223,25 @@ while(person.getCurrentTime() < endTime):
 	
 	# paint_count += 1
 	# if paint_count % 1000 == 0:
-	housePainter.drawPicture(person)
+	housePainter.drawHousePicture(mainHouse,humanlist)
 		# paint_count = 0
 
 	if(not housePainter.isRun()):
 		continue
 	
-	person.iterateTime(timeSlot)
-	person.iterateT(timeSlot)
+	mainHouse.iterateTime(timeSlot)
+	mainHouse.iterateT(timeSlot)
+	for person in humanlist:
+	    person.iterateTime(timeSlot)
+	    person.iterateT(timeSlot)
+	    timeEventDispatch(person)
+	    enviromentEventDispatch(person)
 
+	    eventManage(person)
 	# fp.write( time.strftime("%H:%M:%S", time.localtime(person.getCurrentTime())) + '	' + str(person.getSimT().getCurrentTemperature()) + '\n')
 	# person.writeNowStatu(fp)
-
-	timeEventDispatch(person)
-	enviromentEventDispatch(person)
-
-	eventManage(person)
+	
+	
 
 	person.saveRecord()
 

@@ -95,57 +95,57 @@ class room:
         #dormitory
 		if (self.roomType == 'dormitory'):
             #小爱音箱*5
-			dormitoryXiaoaiAudio1 = device(1001, 'dormitoryXiaoaiAudio1', 'voice_assistant', 0, 0)
+			dormitoryXiaoaiAudio1 = device(1001, 'dormitoryXiaoaiAudio1', 'voice_assistant', 0, 0, 0, 2,1)
 			self.deviceList.append(dormitoryXiaoaiAudio1)
-			dormitoryXiaoaiAudio2 = device(1002, 'dormitoryXiaoaiAudio2', 'voice_assistant', 0, 0)
+			dormitoryXiaoaiAudio2 = device(1002, 'dormitoryXiaoaiAudio2', 'voice_assistant', 0, 0, 0, 4,2)
 			self.deviceList.append(dormitoryXiaoaiAudio2)
-			dormitoryXiaoaiAudio3 = device(1003, 'dormitoryXiaoaiAudio3', 'voice_assistant', 0, 0)
+			dormitoryXiaoaiAudio3 = device(1003, 'dormitoryXiaoaiAudio3', 'voice_assistant', 0, 0, 0, 6,3)
 			self.deviceList.append(dormitoryXiaoaiAudio3)
-			dormitoryXiaoaiAudio4 = device(1004, 'dormitoryXiaoaiAudio4', 'voice_assistant', 0, 0)
+			dormitoryXiaoaiAudio4 = device(1004, 'dormitoryXiaoaiAudio4', 'voice_assistant', 0, 0, 0, 8,4)
 			self.deviceList.append(dormitoryXiaoaiAudio4)
-			dormitoryXiaoaiAudio5 = device(1005, 'dormitoryXiaoaiAudio5', 'voice_assistant', 0, 0)
+			dormitoryXiaoaiAudio5 = device(1005, 'dormitoryXiaoaiAudio5', 'voice_assistant', 0, 0, 0, 10,0)
 			self.deviceList.append(dormitoryXiaoaiAudio5)
             #蓝牙温湿度计
-			dormitoryThermometer = device(1006, 'dormitoryThermometer', 'thermometer', 0, 0)
+			dormitoryThermometer = device(1006, 'dormitoryThermometer', 'thermometer', 0, 0,2,2,-1)
 			self.deviceList.append(dormitoryThermometer)
             #摄像机
-			dormitoryCamere1 = device(1007, 'dormitoryCamere1', 'camere', 0, 0)
+			dormitoryCamere1 = device(1007, 'dormitoryCamere1', 'camere', 0, 0,4,4,-1)
 			self.deviceList.append(dormitoryCamere1)
             #门窗传感器*3
-			dormitoryDoorWindowSensor1 = device(1008, 'dormitoryDoorWindowSensor1', 'sensor', 0, 0)
+			dormitoryDoorWindowSensor1 = device(1008, 'dormitoryDoorWindowSensor1', 'sensor', 0, 0,0,0,-1)
 			self.deviceList.append(dormitoryDoorWindowSensor1)
-			dormitoryDoorWindowSensor2 = device(1009, 'dormitoryDoorWindowSensor2', 'sensor', 0, 0)
+			dormitoryDoorWindowSensor2 = device(1009, 'dormitoryDoorWindowSensor2', 'sensor', 0, 0,10,0,-1)
 			self.deviceList.append(dormitoryDoorWindowSensor2)
-			dormitoryDoorWindowSensor3 = device(1010, 'dormitoryDoorWindowSensor3', 'sensor', 0, 0)
+			dormitoryDoorWindowSensor3 = device(1010, 'dormitoryDoorWindowSensor3', 'sensor', 0, 0,0,20,-1)
 			self.deviceList.append(dormitoryDoorWindowSensor3)
             #人体移动传感器*2
-			dormitoryHumanSensor1 = device(1011, 'dormitoryHumanSensor1', 'sensor', 0, 0)
+			dormitoryHumanSensor1 = device(1011, 'dormitoryHumanSensor1', 'sensor', 0, 0,2,0,-1)
 			self.deviceList.append(dormitoryHumanSensor1)   
-			dormitoryHumanSensor2 = device(1012, 'dormitoryHumanSensor2', 'sensor', 0, 0)
+			dormitoryHumanSensor2 = device(1012, 'dormitoryHumanSensor2', 'sensor', 0, 0,2,20,-1)
 			self.deviceList.append(dormitoryHumanSensor2)
             #三开关单控开关
-			dormitoryThreeSwitch = device(1013, 'dormitoryThreeSwitch', 'switch', 0, 0)
+			dormitoryThreeSwitch = device(1013, 'dormitoryThreeSwitch', 'switch', 0, 0,5,0,-1)
 			self.deviceList.append(dormitoryThreeSwitch)  
             #窗帘伴侣
-			dormitoryCurtainCompanion = device(1014, 'dormitoryCurtainCompanion', 'switch', 0, 0)
+			dormitoryCurtainCompanion = device(1014, 'dormitoryCurtainCompanion', 'switch', 0, 0,0,20,-1)
 			self.deviceList.append(dormitoryCurtainCompanion) 
             #智能插座
-			dormitorySmartSocket = device(1015, 'dormitorySmartSocket', 'socket', 0, 0)
+			dormitorySmartSocket = device(1015, 'dormitorySmartSocket', 'socket', 0, 0, 0, 10,0)
 			self.deviceList.append(dormitorySmartSocket) 
 
 			#寝室门
-			dormitoryDoor =  device(1016, 'dormitoryDoor', 'door', 0, 0)
+			dormitoryDoor =  device(1016, 'dormitoryDoor', 'door', 0, 0,0,0,-1)
 			self.deviceList.append(dormitoryDoor)
 
             #寝室空调
-			dormitoryAircondition = device(1017, 'dormitoryAircondition', 'airCondition', 0, 0)
+			dormitoryAircondition = device(1017, 'dormitoryAircondition', 'airCondition', 0, 0,5,20,-1)
 			self.deviceList.append(dormitoryAircondition)
 
 			#寝室灯
-			dormitoryLamp = device(1018, 'dormitoryLampOfAll', 'lamp',0,0)
+			dormitoryLamp = device(1018, 'dormitoryLampOfAll', 'lamp',0,0,5,10,-1)
 			self.deviceList.append(dormitoryLamp)
 
-		self.setDevicesPosRandom()
+		#self.setDevicesPosRandom()
 
 	#随机摆放设备位置
 	def setDevicesPosRandom(self):
