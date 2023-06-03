@@ -15,7 +15,7 @@ class room:
 	}
 
 
-	def __init__(self, ID = -1, roomType = 'None', roomLeft = 0, roomRight = 0, roomTop = 0, roomBottom = 0, deviceList = []):
+	def __init__(self, ID = -1, roomType = 'None', roomLeft = 0, roomRight = 0, roomTop = 0, roomBottom = 0):
 		# print('in __init__ of room')
 		
         
@@ -26,7 +26,7 @@ class room:
 		self.roomRight  = roomRight
 		self.roomTop    = roomTop
 		self.roomBottom = roomBottom
-		self.deviceList = deviceList
+		self.deviceList = []
 		self.simL       = lightSimulator()
 		# self.initDeviceList()
 
