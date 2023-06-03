@@ -9,10 +9,10 @@ class device:
 	typeStrToNum =        {
 		"lamp"           :        0,
 		"airCondition"   :        1,
-		"TV"             :        2,
+		#"TV"             :        2,
 		"computer"       :        3,
 		"charger"        :        4,
-		"heater"         :        5,
+		#"heater"         :        5,
 		"door"           :        6,
 		"window"         :        7,
 		"other"          :        8,

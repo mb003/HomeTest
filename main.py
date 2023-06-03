@@ -14,23 +14,21 @@ weekdayEventTimeList = {
 	"07:55:00"      :      "wakeUp",
 	"08:10:00"      :      "eatDinner",
 	"08:30:00"      :      "goToSchool",
-	# "11:30:00"      :      "cook",
 	"12:10:00"      :      "eatDinner",
-	"18:30:00"      :      "goHome",
-	# "18:45:00"      :      "cook",
-	"19:25:00"      :      "eatDinner",
-	# "19:45:00"      :      "watchTV",
+	"12:30:00"		:	   "goHome",
+	"14:00:00"		:	   "goToSchool",
+	"17:00:00"		:	   "eatDinner",
+	"17:20:00"      :      "goHome",
 	"22:45:00"      :      "takeAShowerStart",
 	"23:30:00"      :      "goToSleep"
 }
 
 weekendEventTimeList = {
 	"08:55:00"      :      "wakeUp",
-	# "11:30:00"      :      "cook",
 	"12:10:00"      :      "eatDinner",
-	# "18:45:00"      :      "cook",
-	"19:25:00"      :      "eatDinner",
-	# "19:45:00"      :      "watchTV",
+	"12:30:00"		:	   "goHome",
+	"17:00:00"      :      "eatDinner",
+	"17:20:00"      :      "goHome",
 	"22:45:00"      :      "takeAShowerStart",
 	"23:59:00"      :      "goToSleep"
 }
@@ -39,16 +37,17 @@ weekendEventTimeList = {
 roomList = {
 	"bathroom",
 	"dormitory",
-	"diningRoom"
+	"diningRoom",
+	"outside"
 }
 
 
 
 # Time init
-strStartTime = "2012 2 10 00:00:00"
+strStartTime = "2023 2 10 00:00:00"
 startTime = time.mktime(time.strptime(strStartTime, "%Y %m %d %H:%M:%S"))
 
-strEndTime = "2012 3 1 00:00:00"
+strEndTime = "2023 3 1 00:00:00"
 endTime = time.mktime(time.strptime(strEndTime, "%Y %m %d %H:%M:%S"))
 
 currentTime = startTime
@@ -63,42 +62,17 @@ currentTime = startTime
 
 mainHouse = house(roomList = roomList, width = 30, height = 20,currentTime=currentTime)
 
-# Human init
 person = human(0, 25, 50, 90, 95, 1, 3, currentTime)
-person.readHumanFromDB(ID = 25)
-person.initHouse(mainHouse)
-person.initPos(0,0)
-person.moveToRoom('dormitory')
-#person.saveInfoToDB()
-
 two = human(1, 25, 50, 90, 95, 1, 3, currentTime)
-two.readHumanFromDB(ID = 25)
-two.initHouse(mainHouse)
-two.initPos(0,2)
-two.moveToRoom('dormitory')
-#two.saveInfoToDB()
-
 three = human(2, 25, 50, 90, 95, 1, 3, currentTime)
-three.readHumanFromDB(ID = 25)
-three.initHouse(mainHouse)
-three.initPos(0,2)
-three.moveToRoom('dormitory')
-#three.saveInfoToDB()
-
 four = human(3, 25, 50, 90, 95, 1, 3, currentTime)
-four.readHumanFromDB(ID = 25)
-four.initHouse(mainHouse)
-four.initPos(0,2)
-four.moveToRoom('dormitory')
-#four.saveInfoToDB()
-
 five = human(4, 25, 50, 90, 95, 1, 3, currentTime)
-five.readHumanFromDB(ID = 25)
-five.initHouse(mainHouse)
-five.initPos(0,2)
-five.moveToRoom('dormitory')
-#five.saveInfoToDB()
 humanlist = [person,two,three,four,five]
+for i in range(len(humanlist)):
+	humanlist[i].readHumanFromDB(ID =25)
+	humanlist[i].initHouse(mainHouse)
+	humanlist[i].initPos(0,0)
+	humanlist[i].moveToRoom('dormitory')
 
 # Event queue init
 queues = []
@@ -171,11 +145,11 @@ def enviromentEventDispatch(man):
 			exit(0)
 
 	# 关掉不在的房间的灯
-	if ( man.isInHome() and not man.isSleeping() ):
-		percent = timeSlot * 1.0 / (3*60) * man.getVigour()
-		if(random.uniform(0,100) < percent):
-			newEvent = event(man.getCurrentTime(), "turnOffOtherRoomLamp")
-			queues[man.getID()].appendleft(newEvent)
+	#if ( man.isInHome() and not man.isSleeping() ):
+	#	percent = timeSlot * 1.0 / (3*60) * man.getVigour()
+	#	if(random.uniform(0,100) < percent):
+	#		newEvent = event(man.getCurrentTime(), "turnOffOtherRoomLamp")
+	#		queues[man.getID()].appendleft(newEvent)
 
 	# 如果当前没有事情，随机找事情做
 	if (man.isInHome() and not man.isSleeping()):
@@ -232,17 +206,13 @@ while(person.getCurrentTime() < endTime):
 	mainHouse.iterateTime(timeSlot)
 	mainHouse.iterateT(timeSlot)
 	for person in humanlist:
-	    person.iterateTime(timeSlot)
-	    person.iterateT(timeSlot)
-	    timeEventDispatch(person)
-	    enviromentEventDispatch(person)
-
-	    eventManage(person)
+		person.iterateTime(timeSlot)
+		person.iterateT(timeSlot)
+		timeEventDispatch(person)
+		enviromentEventDispatch(person)
+		eventManage(person)
 	# fp.write( time.strftime("%H:%M:%S", time.localtime(person.getCurrentTime())) + '	' + str(person.getSimT().getCurrentTemperature()) + '\n')
 	# person.writeNowStatu(fp)
-	
-	
-
 	person.saveRecord()
 
 	

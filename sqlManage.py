@@ -6,7 +6,7 @@ import MySQLdb.cursors
 
 class SQLManagement:
 
-    def __init__(self, host = 'localhost', port = 3306, user = 'root', password = 'layort20031006', db = 'test'):
+    def __init__(self, host = 'localhost', port = 3306, user = 'root', password = 'root', db = 'localhost'):
         self.host         = host
         self.port         = port
         self.user         = user
@@ -51,7 +51,7 @@ class SQLManagement:
     def closeConnection(self):
         self.conn.close()
 
-    def connect(self, host = 'localhost', port = 3306, user = 'root', password = 'layort20031006', db = 'test'):
+    def connect(self, host = 'localhost', port = 3306, user = 'root', password = 'root', db = 'localhost'):
         self.host         = host
         self.port         = port
         self.user         = user

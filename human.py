@@ -451,7 +451,7 @@ class human:
 	#调整是否在家
 	def leaveHome(self):
 		self.inHome = False
-		self.moveTo(0, 0)
+		self.moveTo(25, 6)
 
 	def goBackHome(self):
 		self.inHome = True
@@ -466,6 +466,7 @@ class human:
 	def goToSleep(self):
 		self.flagSleeping = True
 		self.setRandomMove(False)
+		self.moveTo(3,12)
 
 	def wakeUp(self):
 		self.flagSleeping = False
@@ -614,7 +615,8 @@ class human:
 		sql = sql + "')"
 		try:
 			self.sqlMana.insert(sql)
-		except:
+		except Exception as error:
+			print(error)
 			print("sql \n Error!",sql)
 			exit(0)
 		return True
